@@ -1,0 +1,54 @@
+
+notes = []
+
+home_dir = v {
+    import os
+    return(os.home_dir())
+} endv
+
+for {
+    println("\e[2J\e[H")
+    println("Take notes! (write in MD)\n")
+    i = 0
+    for i < len(notes) {
+        println(">> ", notes[i])
+        i = i + 1
+    }
+
+    input_data = input(">>> ")
+
+    if input_data == ":q" {
+        break
+    }else if input_data == ":w" {
+        path = input("Path: ")
+
+        writing_string = ""
+
+
+        i = 0
+        for i < len(notes) {
+            writing_string = writing_string + "\n" + notes[i]
+            i = i + 1
+        }
+
+        abs_value = v {
+            import os
+            os.write_file(os.abs_path("%i{path}"),"%i{writing_string}") or {"errror"}
+        } endv
+
+        println(abs_value)
+
+
+        break
+    } else if input_data == ":d" {
+        delete_prompt  = input("Delete previous line [Y/n]: ")
+        if delete_prompt == "y" || delete_prompt == "" {
+            notes >>
+        }
+    } else if input_data == ":c" {
+        notes = []
+    } else {
+        notes << input_data
+    }
+
+}
